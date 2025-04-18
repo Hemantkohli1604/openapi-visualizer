@@ -2,6 +2,10 @@
 
 OpenAPI Visualizer is a React-based application that allows users to visualize and interact with OpenAPI specifications. It provides a code editor for editing API specs, a Swagger UI preview for documentation, and a flow diagram to visualize API endpoints.
 
+## Sample
+
+https://hemantkohli1604.github.io/openapi-visualizer/
+
 ## Features
 
 - **Code Editor**: Edit OpenAPI specifications in YAML or JSON format with syntax validation.
