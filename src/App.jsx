@@ -57,6 +57,16 @@ paths:
   const [spec, setSpec] = useState(defaultSpec); // Shared state for OpenAPI spec
   const [isFlowExpanded, setIsFlowExpanded] = useState(false); // State to toggle API Flow expansion
 
+  // Handle empty or invalid spec
+  const handleSpecChange = (newSpec) => {
+    if (!newSpec.trim()) {
+      // Reset to default spec if the editor is cleared
+      setSpec(defaultSpec);
+    } else {
+      setSpec(newSpec);
+    }
+  };
+
   return (
     <div className='flex flex-col w-full h-screen bg-gray-900 text-gray-100'>
       {/* Header */}
@@ -66,7 +76,7 @@ paths:
       <div className='flex flex-grow overflow-hidden'>
         {/* Left Panel */}
         <div className={`w-full ${isFlowExpanded ? 'md:w-1/4' : 'md:w-1/3'} flex flex-col p-4 overflow-auto`}>
-          <CodeEditor spec={spec} setSpec={setSpec} />
+          <CodeEditor spec={spec} setSpec={handleSpecChange} />
         </div>
 
         {/* Middle Panel */}

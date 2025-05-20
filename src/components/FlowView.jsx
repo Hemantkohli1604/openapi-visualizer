@@ -71,40 +71,84 @@ const FlowView = ({ spec }) => {
       },
     };
 
-    // Create operation nodes
-    const operationNodes = Object.entries(parsedSpec.paths).map(
-      ([path, operations], index) => {
-        const operationKey = Object.keys(operations)[0]; // e.g., 'get', 'post'
-        const operation = operations[operationKey];
-        return {
-          id: `operation-${index}`,
-          type: 'default',
-          data: { label: `${operationKey.toUpperCase()} - ${path} : ${operation.summary || ''}` },
-          position: { x: 0, y: 0 }, // Position will be set by dagre
-          draggable: true,
-        //   sourcePosition: 'bottom',
-        //   targetPosition: 'top',
-          style: {
-            color: 'darkgrey',
-          },
-        };
+    // Group operations by the first part of the URL
+    const groupedPaths = {};
+    Object.entries(parsedSpec.paths).forEach(([path, operations]) => {
+      const basePath = path.split('/')[1] || '/'; // Get the first part of the path
+      if (!groupedPaths[basePath]) {
+        groupedPaths[basePath] = [];
       }
-    );
+      groupedPaths[basePath].push({ path, operations });
+    });
 
-    // Create edges
-    const edges = operationNodes.map((operationNode) => ({
-      id: `edge-api-${operationNode.id}`,
-      source: 'api',
-      target: operationNode.id,
+    // Create parent nodes for each base path
+    const parentNodes = Object.keys(groupedPaths).map((basePath, index) => ({
+      id: `parent-${basePath}`,
       type: 'default',
-      markerEnd: {
-        type: MarkerType.Arrow,
+      data: { label: `/${basePath}` },
+      position: { x: 0, y: 0 }, // Position will be set by dagre
+      draggable: true,
+      sourcePosition: 'bottom',
+      targetPosition: 'top',
+      style: {
+        color: 'darkblue',
       },
-      animate: true,
     }));
 
+    // Create operation nodes
+    const operationNodes = [];
+    const edges = [];
+
+    parentNodes.forEach((parentNode) => {
+      const basePath = parentNode.id.replace('parent-', '');
+      groupedPaths[basePath].forEach(({ path, operations }, index) => {
+        Object.entries(operations).forEach(([method, operation], opIndex) => {
+          const operationNode = {
+            id: `operation-${basePath}-${index}-${opIndex}`,
+            type: 'default',
+            data: {
+              label: `${method.toUpperCase()} - ${path} : ${operation.summary || ''}`,
+            },
+            position: { x: 0, y: 0 }, // Position will be set by dagre
+            draggable: true,
+            style: {
+              color: 'darkgrey',
+            },
+          };
+          operationNodes.push(operationNode);
+
+          // Create edge from parent node to operation node
+          edges.push({
+            id: `edge-${parentNode.id}-${operationNode.id}`,
+            source: parentNode.id,
+            target: operationNode.id,
+            type: 'default',
+            markerEnd: {
+              type: MarkerType.Arrow,
+            },
+            animate: true,
+          });
+        });
+      });
+
+      // Create edge from API node to parent node
+      edges.push({
+        id: `edge-api-${parentNode.id}`,
+        source: 'api',
+        target: parentNode.id,
+        type: 'default',
+        markerEnd: {
+          type: MarkerType.Arrow,
+        },
+        animate: true,
+      });
+    });
+
     // Apply dagre layout
-    const laidOutNodes = applyDagreLayout([apiNode, ...operationNodes], edges);
+    const laidOutNodes = applyDagreLayout(
+      [apiNode, ...parentNodes, ...operationNodes],
+      edges
+    );
 
     // Set nodes and edges
     setNodes(laidOutNodes);
