@@ -81,6 +81,7 @@ paths:
         <div className={`w-full ${isFlowExpanded ? 'md:w-3/4' : 'md:w-1/3'} flex flex-col p-4 overflow-auto`}>
           <h2 className='text-xl font-bold mb-4'>API Flow Diagram</h2>
           <p> Click "Expand API Flow" button for expanded view </p>
+          <br>  </br>
           <button
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
