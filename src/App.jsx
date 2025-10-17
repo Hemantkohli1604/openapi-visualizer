@@ -56,7 +56,7 @@ paths:
                   email:
                     type: string`;
   const [spec, setSpec] = useState(defaultSpec); // Shared state for OpenAPI spec
-  const [isFlowExpanded, setIsFlowExpanded] = useState(false); // State to toggle API Flow expansion
+  const [isFlowExpanded, setIsFlowExpanded] = useState(true); // State to toggle API Flow expansion
 
   return (
     <div className='flex flex-col w-full h-screen bg-gray-900 text-gray-100'>
@@ -80,8 +80,8 @@ paths:
         {/* Right Panel */}
         <div className={`w-full ${isFlowExpanded ? 'md:w-3/4' : 'md:w-1/3'} flex flex-col p-4 overflow-auto`}>
           <h2 className='text-xl font-bold mb-4'>API Flow Diagram</h2>
-          <p> Click "Expand API Flow" button for expanded view </p>
-          <br>  </br>
+          <p> Click "Collapse API Flow" button to show swagger preview </p>
+
           <button
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
