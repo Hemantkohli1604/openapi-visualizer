@@ -22,7 +22,7 @@ const CodeEditor = ({ spec, setSpec }) => {
 
   return (
     <div className='p-4'>
-      <h2 className='text-xl font-bold mb-4'>Edit OPENAPI SPEC</h2>
+      <h2 className='text-xl font-bold mb-4'>Input your YAML or JSON Openapi Specification file in below editor</h2>
       <CodeMirror
         value={spec}
         extensions={[langs.yaml(), langs.json()]}
