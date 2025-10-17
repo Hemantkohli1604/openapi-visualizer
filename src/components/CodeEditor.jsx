@@ -23,13 +23,13 @@ const CodeEditor = ({ spec, setSpec }) => {
   return (
     <div className='p-4'>
       <h2 className='text-xl font-bold mb-4'>Input your YAML or JSON Openapi Specification file in below editor</h2>
+      {error && <div className='text-red-600 mt-2'>{error}</div>}
       <CodeMirror
         value={spec}
         extensions={[langs.yaml(), langs.json()]}
         theme='dark'
         onChange={(value) => handleChange(value)}
-      />
-      {error && <div className='text-red-600 mt-2'>{error}</div>}
+      /> 
     </div>
   );
 };
