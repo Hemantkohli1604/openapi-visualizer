@@ -6,55 +6,55 @@ import Header from './components/Header';
 
 function App() {
   // Load default file
-  const defaultSpec = '';
-//   const defaultSpec = `openapi: 3.0.0
-// info:
-//   title: Sample API
-//   version: 1.0.0
-// paths:
-//   /users:
-//     get:
-//       summary: Get all users
-//       responses:
-//         '200':
-//           description: A list of users
-//           content:
-//             application/json:
-//               schema:
-//                 type: array
-//                 items:
-//                   type: object
-//                   properties:
-//                     id:
-//                       type: integer
-//                     name:
-//                       type: string
-//                     email:
-//                       type: string
-//   /users/{id}:
-//     get:
-//       summary: Get a user by ID
-//       parameters:
-//         - name: id
-//           in: path
-//           required: true
-//           description: The ID of the user to retrieve
-//           schema:
-//             type: integer
-//       responses:
-//         '200':
-//           description: A user object
-//           content:
-//             application/json:
-//               schema:
-//                 type: object
-//                 properties:
-//                   id:
-//                     type: integer
-//                   name:
-//                     type: string
-//                   email:
-//                     type: string`;
+  // const defaultSpec = '';
+  const defaultSpec = `openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    email:
+                      type: string
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the user to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A user object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string`;
   const [spec, setSpec] = useState(defaultSpec); // Shared state for OpenAPI spec
   const [isFlowExpanded, setIsFlowExpanded] = useState(false); // State to toggle API Flow expansion
 
