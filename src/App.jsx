@@ -78,7 +78,7 @@ paths:
         </div>
 
         {/* Right Panel */}
-        <div className={`w-full ${isFlowExpanded ? 'md:w-3/4' : 'md:w-1/3'} flex flex-col p-4 overflow-auto`}>
+        <div className={`w-full ${isFlowExpanded ? 'md:w-3/4' : 'hidden'} flex flex-col p-4 overflow-auto`}>
           <h2 className='text-xl font-bold mb-4'>API Flow Diagram</h2>
           <p> Click below button to toggle swagger preview </p>
 
