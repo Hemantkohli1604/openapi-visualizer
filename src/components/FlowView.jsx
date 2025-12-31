@@ -43,17 +43,30 @@ const FlowView = ({ spec }) => {
   const [nodes, setNodes] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);
 
+  const isSpecEmpty = !spec || String(spec).trim().length === 0;
+
   useEffect(() => {
+    if (isSpecEmpty) {
+      // ensure hooks order stays the same while skipping work for empty spec
+      setNodes([]);
+      setEdges([]);
+      return;
+    }
+
     let parsedSpec = {};
     try {
       parsedSpec = yaml.parse(spec);
     } catch (e) {
       console.error('Failed to parse spec:', e);
+      setNodes([]);
+      setEdges([]);
       return;
     }
 
-    if (!parsedSpec.info || !parsedSpec.paths) {
+    if (!parsedSpec || !parsedSpec.info || !parsedSpec.paths) {
       console.error('Invalid OpenAPI spec');
+      setNodes([]);
+      setEdges([]);
       return;
     }
 
@@ -62,54 +75,51 @@ const FlowView = ({ spec }) => {
       id: 'api',
       type: 'default',
       data: { label: parsedSpec.info.title || 'API' },
-      position: { x: 0, y: 0 }, // Position will be set by dagre
+      position: { x: 0, y: 0 },
       draggable: true,
       sourcePosition: 'bottom',
       targetPosition: 'top',
-      style: {
-        color: 'darkgrey',
-      },
+      style: { color: 'darkgrey' },
     };
 
     // Create operation nodes
     const operationNodes = Object.entries(parsedSpec.paths).map(
       ([path, operations], index) => {
-        const operationKey = Object.keys(operations)[0]; // e.g., 'get', 'post'
+        const operationKey = Object.keys(operations)[0];
         const operation = operations[operationKey];
         return {
           id: `operation-${index}`,
           type: 'default',
           data: { label: `${operationKey.toUpperCase()} - ${path} : ${operation.summary || ''}` },
-          position: { x: 0, y: 0 }, // Position will be set by dagre
+          position: { x: 0, y: 0 },
           draggable: true,
-        //   sourcePosition: 'bottom',
-        //   targetPosition: 'top',
-          style: {
-            color: 'darkgrey',
-          },
+          style: { color: 'darkgrey' },
         };
       }
     );
 
-    // Create edges
-    const edges = operationNodes.map((operationNode) => ({
+    const edgesLocal = operationNodes.map((operationNode) => ({
       id: `edge-api-${operationNode.id}`,
       source: 'api',
       target: operationNode.id,
       type: 'default',
-      markerEnd: {
-        type: MarkerType.Arrow,
-      },
+      markerEnd: { type: MarkerType.Arrow },
       animate: true,
     }));
 
-    // Apply dagre layout
-    const laidOutNodes = applyDagreLayout([apiNode, ...operationNodes], edges);
+    const laidOutNodes = applyDagreLayout([apiNode, ...operationNodes], edgesLocal);
 
-    // Set nodes and edges
     setNodes(laidOutNodes);
-    setEdges(edges);
-  }, [spec, setNodes, setEdges]);
+    setEdges(edgesLocal);
+  }, [spec, setNodes, setEdges, isSpecEmpty]);
+
+  if (isSpecEmpty) {
+    return (
+      <div className="h-full w-full flex items-center justify-center">
+        input your yaml in the textbox to see the flow here.
+      </div>
+    );
+  }
 
   return (
     <div className="h-full w-full">
