@@ -70,8 +70,8 @@ paths:
 
         {/* Right Panel */}
         <div className='w-full md:w-2/3 flex flex-col p-4 overflow-auto'>
-          <h2 className='text-xl font-bold mb-4'>API Visualizer</h2>
-          <p>Click the button below to toggle between Swagger Preview and API Flow Diagram.</p>
+          {/* <h2 className='text-xl font-bold mb-4'>API Visualizer</h2> */}
+          {/* <p>Click the button below to toggle between Swagger Preview and API Flow Diagram.</p> */}
 
           <button
             type="button"
